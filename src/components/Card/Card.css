@@ -1,0 +1,9 @@
+.cardAnimation-appear {
+  opacity: 0.01;
+  transform: rotate(20deg);
+}
+
+.cardAnimation-appear.cardAnimation-appear-active {
+  opacity: 1;
+  transition: all 1s ease-in;
+}

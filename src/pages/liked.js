@@ -1,6 +1,7 @@
 import Card from "../components/Card/Card";
 import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
+import SearchBox from "../components/Search/Search";
 import { Grid } from "@mui/material";
 import useGetLikedCharacters from "../components/useGetLikedCharacters";
 
@@ -14,22 +15,37 @@ export default function Liked(props) {
   function getLikeStatus(status) {
     setLikedStatus(status);
   }
+  const [option, setOption] = useState(null);
+  const [value, setValue] = useState(null);
+  function setSearchOptions(option, value) {
+    setOption(option);
+    setValue(value);
+  }
+
   const [likedCharacters, keys] = useGetLikedCharacters(likedStatus);
+  let mappedCharacters = likedCharacters;
+  if (option && value) {
+    mappedCharacters = likedCharacters.filter((character) => {
+      return character[option].toLowerCase().includes(value.toLowerCase());
+    });
+  } else if (value === "") {
+    mappedCharacters = likedCharacters;
+  }
+
   return (
     <React.Fragment>
       <Navbar />
+      <SearchBox setSearchOptions={setSearchOptions} />
       <Grid container>
-        {likedCharacters &&
-          likedCharacters.map((data) => {
+        {mappedCharacters &&
+          mappedCharacters.map((data) => {
             let show = null;
             if (keys) {
               keys.forEach((characterId) => {
                 if (characterId == data.id) {
                   show = "Unlike";
-                  console.log(characterId, data.id);
                 } else if (show != "Unlike") {
                   show = "Like";
-                  console.log(characterId, data.id);
                 }
               });
             }

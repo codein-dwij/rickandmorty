@@ -37,16 +37,6 @@ function App() {
         }
       />
       <Route
-        path="/home"
-        element={
-          <Home
-            characterData={characterData}
-            setCharacterData={setCharacterData}
-            likedCharacterData={likedCharacterData}
-          />
-        }
-      />
-      <Route
         path="/liked"
         element={
           <Liked

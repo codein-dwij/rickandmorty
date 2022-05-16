@@ -3,14 +3,13 @@ export default function useGetLikedCharacters(dep) {
   const [likedCharacters, setLikedCharacters] = useState([]);
   const [keys, setKeys] = useState(null);
   useEffect(() => {
-    let key = Object.keys(localStorage);
-    let arr = [],
-      i = key.length;
-
-    while (i--) {
-      arr.push(JSON.parse(localStorage.getItem(key[i])));
+    const arr = JSON.parse(localStorage.getItem("liked"));
+    const key = [];
+    if (arr) {
+      arr.forEach((item) => {
+        key.push(item.id);
+      });
     }
-
     setLikedCharacters(arr);
     setKeys(key);
   }, [dep]);

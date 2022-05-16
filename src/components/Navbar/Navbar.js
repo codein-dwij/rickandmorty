@@ -1,103 +1,90 @@
 import * as React from "react";
-// import { styled, alpha } from "@mui/material/styles";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-// import InputBase from "@mui/material/InputBase";
-// import SearchIcon from "@mui/icons-material/Search";
+
 import MenuItem from "@mui/material/MenuItem";
+import "./Navbar.css";
 import { NavLink } from "react-router-dom";
 
-// const Search = styled("div")(({ theme }) => ({
-//   position: "relative",
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.15),
-//   "&:hover": {
-//     backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   },
-//   marginLeft: 0,
-//   width: "100%",
-//   [theme.breakpoints.up("xs")]: {
-//     marginLeft: theme.spacing(1),
-//     width: "auto",
-//   },
-// }));
+export default function Navbar(props) {
+  // console.log(props);
 
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 2),
-//   height: "100%",
-//   position: "absolute",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-// }));
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     "&:focus": {
-//       width: "20ch",
-//     },
-//     [theme.breakpoints.up("xs")]: {
-//       width: "12ch",
-//       "&:focus": {
-//         width: "20ch",
-//       },
-//     },
-//   },
-// }));
-
-export default function Navbar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 0.5 }}>
       <AppBar position="static">
         <Toolbar>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="div"
-            sx={{ display: { sm: "block", xs: "none" } }}
+            sx={{
+              display: { sm: "block", xs: "none" },
+              fontFamily: "'Poppins', sans-serif",
+            }}
           >
-            <NavLink
-              style={{ textDecoration: "none", color: "white" }}
-              to="/home"
-            >
-              Rick&Morty
+            <NavLink className="links" to="/">
+              Rick & Morty
             </NavLink>
           </Typography>
-          <MenuItem sx={{ fontSize: "20px", marginLeft: "30px" }}>
+          <MenuItem
+            sx={{
+              fontSize: { md: "20px", sm: "7px" },
+              fontFamily: "'Poppins', sans-serif",
+            }}
+          >
             <NavLink
-              style={{ textDecoration: "none", color: "white" }}
-              to="/home"
+              className={({ isActive }) =>
+                isActive ? "active-link links" : "links"
+              }
+              to="/"
             >
               Home
             </NavLink>
           </MenuItem>
 
-          <MenuItem sx={{ fontSize: "20px" }}>
+          <MenuItem
+            sx={{
+              fontSize: { md: "20px", sm: "7px" },
+              fontFamily: "'Poppins', sans-serif",
+            }}
+          >
             <NavLink
-              style={{ textDecoration: "none", color: "white" }}
+              className={({ isActive }) =>
+                isActive ? "active-link links" : "links"
+              }
               to="/liked"
             >
               Liked
             </NavLink>
           </MenuItem>
 
-          <Typography sx={{ flexGrow: 1 }}></Typography>
-          {/* <Search>
+          <Typography sx={{ flexGrow: { md: 1 } }}></Typography>
+          {/* <FormControl sx={{ m: 1, minWidth: 60 }} size="small">
+          
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={option}
+              onChange={handleChange}
+              defaultValue="name"
+            >
+              <MenuItem value="name">Name</MenuItem>
+              <MenuItem value="status">Status</MenuItem>
+              <MenuItem value="gender">Gender</MenuItem>
+              <MenuItem value="species">Species</MenuItem>
+            </Select>
+          </FormControl>
+          <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              onChange={setSearchValue}
             />
           </Search> */}
         </Toolbar>

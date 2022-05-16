@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useRef,
+  useImperativeHandle,
+} from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import useGetLikedCharacters from "../useGetLikedCharacters";
-
-export default function MultiActionAreaCard(props) {
+import ReactCardFlip from "react-card-flip";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+const MultiActionAreaCard = forwardRef((props, ref) => {
   const [like, setLike] = useState(false);
   const [likedCharacters, keys] = useGetLikedCharacters(like);
   function buttonClicked(e) {
     e.stopPropagation();
-
+    console.log("here");
     setLike(true);
     if (props.getLikeStatus) {
       props.getLikeStatus(like);
@@ -26,14 +34,28 @@ export default function MultiActionAreaCard(props) {
         }
       });
       if (!likeCheck) {
+        const key = Object.keys(localStorage);
+        if (key.length === 0) {
+          localStorage.setItem("liked", JSON.stringify([props.data]));
+        } else {
+          const values = JSON.parse(localStorage.getItem("liked"));
+          values.push(props.data);
+          localStorage.setItem("liked", JSON.stringify(values));
+        }
         props.data.isOpen = false;
-        localStorage.setItem(props.data.id, JSON.stringify(props.data));
+        // localStorage.setItem(props.data.id, JSON.stringify(props.data));
         setLike(false);
         if (props.getLikeStatus) {
           props.getLikeStatus(like);
         }
       } else {
-        localStorage.removeItem(props.data.id);
+        const values = JSON.parse(localStorage.getItem("liked"));
+
+        const index = values.findIndex(
+          (element) => element.id === props.data.id
+        );
+        values.splice(index, 1);
+        localStorage.setItem("liked", JSON.stringify(values));
         setLike(false);
         if (props.getLikeStatus) {
           props.getLikeStatus(like);
@@ -41,10 +63,15 @@ export default function MultiActionAreaCard(props) {
       }
     }
   }, [like, props, keys]);
+
+  const [isFlipped, setIsFlipped] = useState(false);
+  const handleClick = () => {
+    setIsFlipped(!isFlipped);
+  };
   const FRONT_CARD = (
     <Card sx={{ maxWidth: 3400 }}>
       <CardActionArea>
-        <CardMedia component="img" height="250" image={props.data.image} />
+        <CardMedia component="img" height="350" image={props.data.image} />
       </CardActionArea>
       <CardActions sx={{ borderTop: 1 }}>
         <Button
@@ -54,7 +81,10 @@ export default function MultiActionAreaCard(props) {
             buttonClicked(e);
           }}
         >
-          {props.show}
+          {props.show === "Like" && (
+            <FavoriteBorderIcon sx={{ color: "red" }} />
+          )}
+          {props.show === "Unlike" && <FavoriteIcon sx={{ color: "red" }} />}
         </Button>
       </CardActions>
     </Card>
@@ -66,10 +96,10 @@ export default function MultiActionAreaCard(props) {
         <Typography
           sx={{
             fontSize: 20,
-            height: 245,
+            height: 343,
             textAlign: "center",
             verticalAlign: "center",
-            fontFamily: "monospace",
+            fontFamily: "'Poppins', sans-serif",
           }}
           color="text.primary"
           gutterBottom
@@ -93,15 +123,39 @@ export default function MultiActionAreaCard(props) {
             buttonClicked(e);
           }}
         >
-          {props.show}
+          {props.show === "Like" && (
+            <FavoriteBorderIcon sx={{ color: "red" }} />
+          )}
+          {props.show === "Unlike" && <FavoriteIcon sx={{ color: "red" }} />}
         </Button>
       </CardActions>
     </Card>
   );
 
-  if (!props.data.isOpen) {
-    return FRONT_CARD;
-  } else {
-    return BACK_CARD;
-  }
-}
+  // if (!props.data.isOpen) {
+  //   return FRONT_CARD;
+  // } else {
+  //   return BACK_CARD;
+  // }
+  useImperativeHandle(ref, () => ({
+    flipCard() {
+      handleClick();
+      console.log("here2");
+    },
+  }));
+  return (
+    <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+      <div onClick={handleClick}>
+        {FRONT_CARD}
+        {/* <button onClick={handleClick}>Click to flip</button> */}
+      </div>
+
+      <div onClick={handleClick}>
+        {BACK_CARD}
+        {/* <button onClick={handleClick}>Click to flip</button> */}
+      </div>
+    </ReactCardFlip>
+  );
+});
+
+export default MultiActionAreaCard;
