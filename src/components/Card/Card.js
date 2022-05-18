@@ -42,7 +42,7 @@ const MultiActionAreaCard = forwardRef((props, ref) => {
           values.push(props.data);
           localStorage.setItem("liked", JSON.stringify(values));
         }
-        props.data.isOpen = false;
+        // props.data.isOpen = false;
         // localStorage.setItem(props.data.id, JSON.stringify(props.data));
         setLike(false);
         if (props.getLikeStatus) {
